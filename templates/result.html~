@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Result</title>
+    <link rel="stylesheet" href="/static/style.css" type="text/css">
+    <script src="/static/Chart.js"></script>
+    <meta http-equiv="refresh" content ="60">
+  </head>
+  <body>
+    <table >
+	    <tr>
+		<th>time</th>
+		<th>{{local_time.strftime("%Y-%m-%d %H:%M:%S")}}</th>
+	    </tr>
+	    <tr>
+		<th>tem</th>
+		<th>{{esp_test.get('t')/10-40}}</th>
+	    </tr>
+	    <tr>
+		<th>hum</th>
+		<th>{{esp_test.get('h') }}</th>
+	    </tr>
+		<th>noise</th>
+		<th>{{esp_test.get('noise') }}</th>
+	    <tr>
+		<th>pm</th>
+		<th>{{esp_test.get('pm') }}</th>
+	    </tr>
+	    <tr>	
+		<th>ch2o</th>
+		<th>{{esp_test.get('ch2o') }}</th>
+	    </tr>
+    </table>
+    <p>最近1小时 PM,噪声趋势 <font color ="#97BBCD">PM --</font><font color ="#DCDCDC">NOISE --</font></p>
+		<div style="width:100%">
+			<div>
+				<canvas id="canvas" height="450" width="600"></canvas>
+			</div>
+		</div>
+
+	<script>
+			var hum = {{esp_test.get('h') }}
+			var array = new Array();
+			var len = {{pm}}.length
+			for(var i =0;i<len;i++)
+			{ 
+				array[i] =i+1;
+			}
+			var lineChartData = {
+				labels : array,
+				datasets : [
+					{
+						label: "PM",
+						fillColor : "rgba(151,187,205,0.2)",
+						strokeColor : "rgba(151,187,205,1)",
+						pointColor : "rgba(151,187,205,1)",
+						pointStrokeColor : "#fff",
+						pointHighlightFill : "#fff",
+						pointHighlightStroke : "rgba(151,187,205,1)",
+						data : {{pm}}
+					},
+					{
+					label: "My First dataset",
+					fillColor : "rgba(220,220,220,0.2)",
+					strokeColor : "rgba(220,220,220,1)",
+					pointColor : "rgba(220,220,220,1)",
+					pointStrokeColor : "#fff",
+					pointHighlightFill : "#fff",
+					pointHighlightStroke : "rgba(220,220,220,1)",
+					data : {{noise}}
+					}
+					
+				]
+
+			}
+
+		window.onload = function(){
+			var ctx = document.getElementById("canvas").getContext("2d");
+			window.myLine = new Chart(ctx).Line(lineChartData, {
+				responsive: true
+			});
+		}
+
+
+		</script>
+  </body>
+</html>

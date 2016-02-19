@@ -195,7 +195,7 @@ def json_index(index):
 		query.equal_to('index',index)
 		devicekey=query.first()
 		key=devicekey.id
-		lat = devicekey.get('lat')
+		lat = devivekey.get('lat')
 		lng = devicekey.get('lng')
 	except:
 		return jsonify(error='invalid index')

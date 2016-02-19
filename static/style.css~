@@ -11,5 +11,5 @@ th {
 	height:50px;
 	background-color:green;
 	color:white;
-	font-size:2em;
+	font-size:15px;
 }
