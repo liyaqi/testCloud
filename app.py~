@@ -133,6 +133,18 @@ def device_status():
 			return  jsonify(status='error')
 	return  jsonify(status='ok')
 
+@app.route('/test/<key>')
+def test(key):
+	query = Query(DeviceKey)
+	device=query.get(key)
+	index = device.get('index')
+	name  = device.get('name')
+	print 'Add Data',index,name
+	upload_time =datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+	device.set('uploadtime',upload_time)
+	device.save()
+	print index,'save at',upload_time
+	return	jsonify(status='ok')
 #html for result view
 @app.route('/resultindex/<int:index>')
 def result_index(index):
@@ -263,11 +275,11 @@ def add():
 			
 		except:
 			return jsonify(error='save')
-		upload_time =datetime.now()
-		device.set('uploadtime',upload_time.isoformat())
+		upload_time =datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+		device.set('uploadtime',upload_time)
 		try:
 			device.save()
-			print 'save at',upload_time.isoformat()
+			print index,'save at',upload_time
 		except:
 			return jsonify(error ='staus save error')
 		return jsonify(status ='succeed')
