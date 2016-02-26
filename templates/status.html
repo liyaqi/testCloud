@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>device status</title>
+    <link rel="stylesheet" href="/static/style.css" type="text/css">
+  </head>
+  <body>
+    <div id="container">
+      <h1>设备状态</h1>
+      <table>
+	<tr>
+	<td>设备号 </td><td>设备名 </td><td>最后上传时间</td>
+	</tr>
+	{% for device in devices %}
+        <tr><td>{{ device.get('index') }}</td><td>{{ device.get('name') }}</td> <td>{{ device.get('uploadtime') }}</td></tr>
+        {% endfor %}
+      </table>
+    </div>
+  </body>
+</html>

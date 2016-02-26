@@ -126,12 +126,7 @@ def device_status():
 		devices =query.find()
 	except:
 		jsonify(status='find error')
-	for device in devices:
-		try:
-			print device.get('index'), '',device.get('uploadtime')
-		except:
-			return  jsonify(status='error')
-	return  jsonify(status='ok')
+	return  render_template('status.html', devices=devices)
 
 @app.route('/test/<key>')
 def test(key):
