@@ -16,6 +16,12 @@ class test_esp(Object):
 	pass
 class DeviceKey(Object):
 	pass
+class device():
+	index = 0
+	time  = ""
+	def __init(self,index,time)
+		self.index =index;
+		self.time  =time;
 	
 # 动态路由
 app.register_blueprint(todos_view, url_prefix='/todos')
@@ -111,6 +117,28 @@ def result(key):
 		print 'local time change error'
 		local_time = data.created_at
 	return render_template('result.html', esp_test=data,local_time=local_time)
+#get devices status
+@@app.route('/status')
+def device_status():
+	try:
+		query =Query(DeviceKey)
+		query.descending('index')
+		device_last = query.first()
+		return device_last.index
+	except:
+		print 'device status error'
+		raise		
+def last_update_time(index):
+	try:
+		query =Query(test_esp)
+		query.equal_to('index',index)
+		query.descending('createdAt')
+		latest = query.first()
+		local_time = utc2local(latest.created_at)
+		return local_time
+	except:
+		print 'query error'
+		raise 
 #html for result view
 @app.route('/resultindex/<int:index>')
 def result_index(index):
@@ -182,11 +210,15 @@ def average(results,len):
 		pm_min.append(result.get('pm'))
 	return sum(pm_min)/len
 def utc2local(utc_st):
-	local_time = datetime.now()
-	utc_time = datetime.utcnow()
-	offset =local_time - utc_time
-	local_st = utc_st +offset
-	return local_st 
+	try:
+		local_time = datetime.now()
+		utc_time = datetime.utcnow()
+		offset =local_time - utc_time
+		local_st = utc_st +offset
+		return local_st 
+	except:
+		print 'time change error'
+		raise
 @app.route('/jsonindex/<int:index>')
 def json_index(index):
 	print 'get result from index',index
