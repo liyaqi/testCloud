@@ -16,12 +16,12 @@ class test_esp(Object):
 	pass
 class DeviceKey(Object):
 	pass
-class device():
+class Device:
 	index = 0
 	time  = ""
-	def __init(self,index,time)
-		self.index =index;
-		self.time  =time;
+	def __init__(self,index,time):
+		self.index =index
+		self.time  =time
 	
 # 动态路由
 app.register_blueprint(todos_view, url_prefix='/todos')
@@ -118,20 +118,21 @@ def result(key):
 		local_time = data.created_at
 	return render_template('result.html', esp_test=data,local_time=local_time)
 #get devices status
-@@app.route('/status')
+@app.route('/status')
 def device_status():
-			
-def last_update_time(index):
 	try:
-		query =Query(test_esp)
-		query.equal_to('index',index)
-		query.descending('createdAt')
-		latest = query.first()
-		local_time = utc2local(latest.created_at)
-		return local_time
+		query =Query(DeviceKey)
+		query.ascending('index')
+		devices =query.find()
 	except:
-		print 'query error'
-		raise 
+		jsonify(status='find error')
+	for device in devices:
+		try:
+			print device.get('index'), '',device.get('uploadtime')
+		except:
+			return  jsonify(status='error')
+	return  jsonify(status='ok')
+
 #html for result view
 @app.route('/resultindex/<int:index>')
 def result_index(index):
@@ -259,8 +260,16 @@ def add():
 		test_data = test_esp(ch2o=ch2o_data, t=tem_data, h=hum_data, noise=noi_data, pm=pm_data, key=key_data,name=name,index =index)
 		try:
 			test_data.save()
+			
 		except:
 			return jsonify(error='save')
+		upload_time =datetime.now()
+		device.set('uploadtime',upload_time.isoformat())
+		try:
+			device.save()
+			print 'save at',upload_time.isoformat()
+		except:
+			return jsonify(error ='staus save error')
 		return jsonify(status ='succeed')
 	except:
 		return jsonify(error = 'key')
