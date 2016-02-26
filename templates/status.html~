@@ -7,13 +7,15 @@
   <body>
     <div id="container">
       <h1>设备状态</h1>
+     
       <table>
 	<tr>
-	<td>设备号 </td><td>设备名 </td><td>最后上传时间</td><td>实时数据</td>
+	<td><b>设备号</b> </td><td><b>设备名</b> </td><td><b>最后上传时间</b></td><td><b>实时数据</b></td>
 	</tr>
+        <tr><td><hr/></td></tr>
 	{% for device in devices %}
         <tr><td>{{ device.get('index') }}</td><td>{{ device.get('name_cn') }}</td> <td>{{ device.get('uploadtime') }}</td>
-        <td><a href ="https://720testcloud.leanapp.cn/resultindex/{{{ device.get('index') }}}">数据</a></td></tr>
+        <td><a href ="https://720testcloud.leanapp.cn/resultindex/{{ device.get('index')}}">数据</a></td></tr>
         {% endfor %}
       </table>
     </div>
