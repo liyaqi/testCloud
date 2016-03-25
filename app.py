@@ -165,24 +165,13 @@ def result(key):
 #get devices status
 @app.route('/status')
 def device_status():
-	username =request.cookies.get('username')
-	islogin = session.get('islogin')
-	print username, ' ',islogin
-	if (not username) or( not islogin ) :
-		username = u'请先登录'
-		islogin = '0'
-	if (islogin =='1'):
 		try:
 			query =Query(DeviceKey)
 			query.ascending('index')
 			devices =query.find()
 		except:
 			jsonify(status='find error')
-		return  render_template('status.html',username =username,islogin=islogin, devices=devices)
-	else:
-		return redirect('/login')
-
-	
+		return  render_template('status.html',devices=devices)
 @app.route('/test/<key>')
 def test(key):
 	query = Query(DeviceKey)

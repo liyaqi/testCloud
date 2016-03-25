@@ -1,20 +1,51 @@
 <!DOCTYPE HTML>
 <html>
-{% extends "base.html" %}
-{% block content %}  
+ <head>
+    <title>720Health</title>
+	  <style type="text/css">
+		#customers
+		  {
+		  font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+		  width:100%;
+		  border-collapse:collapse;
+		  }
+
+		#customers td, #customers th 
+		  {
+		  font-size:1.3em;
+		  border:1px solid #98bf21;
+		  padding:3px 7px 2px 7px;
+		  }
+
+		#customers th 
+		  {
+		  font-size:1.1em;
+		  text-align:left;
+		  padding-top:5px;
+		  padding-bottom:4px;
+		  background-color:#A7C942;
+		  color:#ffffff;
+		  }
+
+		#customers tr.alt td 
+		  {
+		  color:#000000;
+		  background-color:#EAF2D3;
+		  }
+</style>
+  </head>
+  <body> 
     <div id="container">
       <h1>设备状态</h1>
      
-      <table>
+    <table id="customers">
 	<tr>
-	<td><b>设备号</b> </td><td><b>设备名</b> </td><td><b>上传时间</b></td><td><b>上次连接时间</b></td><td><b>实时数据</b></td>
+	<td><b>设备号</b> </td><td><b>设备名</b> </td><td><b>上传时间</b></td><td><b>上次连接时间</b></td>
 	</tr>
-        <tr><td><hr/></td><td><hr/></td><td><hr/></td><td><hr/></td><td><hr/></td></tr>
 	{% for device in devices %}
-        <tr><td>{{ device.get('index') }}</td><td>{{ device.get('name_cn') }}</td> <td>{{ device.get('uploadtime') }}</td><td>{{ device.get('ping_time') }}</td>
-        <td><a href ="https://720testcloud.leanapp.cn/resultindex/{{ device.get('index')}}">数据</a></td></tr>
+        <tr><td>{{ device.get('index') }}</td><td><a href ="https://720testcloud.leanapp.cn/resultindex/{{ device.get('index')}}">{{ device.get('name_cn') }}</a></td> <td>{{ device.get('uploadtime') }}</td><td>{{ device.get('ping_time') }}</td>
         {% endfor %}
       </table>
     </div>
- {% endblock %}
+ <body>
 </html>
