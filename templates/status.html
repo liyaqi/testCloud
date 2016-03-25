@@ -43,7 +43,7 @@
 	<td><b>设备号</b> </td><td><b>设备名</b> </td><td><b>上传时间</b></td><td><b>上次连接时间</b></td>
 	</tr>
 	{% for device in devices %}
-        <tr><td>{{ device.get('index') }}</td><td><a href ="https://720testcloud.leanapp.cn/resultindex/{{ device.get('index')}}">{{ device.get('name_cn') }}</a></td> <td>{{ device.get('uploadtime') }}</td><td>{{ device.get('ping_time') }}</td>
+        <tr><td>{{ device.get('index') }}</td><td><a href ="/resultindex/{{ device.get('index')}}">{{ device.get('name_cn') }}</a></td> <td>{{ device.get('uploadtime') }}</td><td>{{ device.get('ping_time') }}</td>
         {% endfor %}
       </table>
     </div>

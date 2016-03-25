@@ -184,6 +184,18 @@ def test(key):
 	device.save()
 	print index,'save at',upload_time
 	return	jsonify(status='ok')
+@app.route('/changename/<int:index>',methods=['GET','POST'])
+def change_name(index):
+	if request.method == 'POST':
+		name_cn = 	request.form.get('name_cn');
+		query =Query(DeviceKey)
+		query.equal_to('index',index)
+		devicekey=query.first()
+		devicekey.set('name_cn',name_cn)
+		devicekey.save()
+		return redirect('/status')
+	else:
+		return render_template('changename.html')
 #html for result view
 @app.route('/resultindex/<int:index>')
 def result_index(index):
@@ -192,12 +204,14 @@ def result_index(index):
 		query =Query(DeviceKey)
 		query.equal_to('index',index)
 		devicekey=query.first()
+		device_name = devicekey.get('name_cn')
+		print device_name
 		key=devicekey.id
 	except:
 		return jsonify(error='invalid index')
 	try:
 		data=get_latest(key)
-	        hour=data.created_at.hour+8
+		hour=data.created_at.hour+8
 		ch2o = data.get('ch2o')
 		if ch2o ==65535:
 			ch2o=0
@@ -213,7 +227,7 @@ def result_index(index):
 	#pm =average_pm(24,key)
 	pm =min_pm(key)
 	noise = min_noise(key)
-	return render_template('result.html', esp_test=data,local_time=local_time,pm=pm,noise=noise)
+	return render_template('result.html', esp_test=data,local_time=local_time,pm=pm,noise=noise,index=index,device_name = device_name)
 def min_pm(key):
 	query =Query(test_esp)
 	query.equal_to('key',key)
