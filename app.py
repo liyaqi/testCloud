@@ -205,7 +205,6 @@ def result_index(index):
 		query.equal_to('index',index)
 		devicekey=query.first()
 		device_name = devicekey.get('name_cn')
-		print device_name
 		key=devicekey.id
 	except:
 		return jsonify(error='invalid index')
