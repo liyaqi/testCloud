@@ -10,8 +10,11 @@ from leancloud import Object
 from leancloud import Query
 from flask import request
 from flask import jsonify
-app = Flask(__name__)
+from flask import session,make_response,redirect
+from leancloud import User
 
+app = Flask(__name__)
+app.secret_key='afjlsjfowflajflkajfkjfkaljf'
 class test_esp(Object):
 	pass
 class DeviceKey(Object):
@@ -29,12 +32,53 @@ app.register_blueprint(todos_view, url_prefix='/todos')
 
 @app.route('/')
 def index():
-    return render_template('index.html')
-
-
+	username =request.cookies.get('username')
+	islogin = session.get('islogin')
+	print username, ' ',islogin
+	if (not username) or( not islogin ) :
+		username = u'请先登录'
+		islogin = '0'
+	return render_template('index.html',username =username,islogin=islogin)
+@app.route('/login',methods=['GET','POST'])
+def login():
+	if request.method == 'POST':
+		username = 	request.form.get('username')
+		password =	request.form.get('password')
+		try:
+			User().login(username, password)
+			response = make_response(redirect('/'))
+			response.set_cookie('username',value = username,max_age =300)
+			session['islogin'] = '1'
+			print 'login succeed'
+			return response
+		except Exception,e:
+		    
+			print e 
+			session['islogin']='0'
+			return redirect('/login')
+	else:
+		session['islogin'] ='0'
+		return render_template('login.html')
+		
+@app.route('/ping/<key>')
+def ping(key):
+	ping_time =datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+	try:
+		query = Query(DeviceKey)
+		device=query.get(key)
+		index = device.get('index')
+		device.set('ping_time',ping_time)
+	except:
+		return jsonify(error ='search error')
+	try:
+		device.save()
+	except:
+		return jsonify(error ='save error')
+	print 'device ',index,'ping @',ping_time
+	return jsonify(index=index,time =ping_time)
 @app.route('/time')
 def time():
-    return str(datetime.now())
+    return jsonify(time = datetime.now())
 @app.route('/tem',methods=['POST'])
 def tem():
 	tem_data = request.json['tem']
@@ -117,17 +161,28 @@ def result(key):
 		print 'local time change error'
 		local_time = data.created_at
 	return render_template('result.html', esp_test=data,local_time=local_time)
+	
 #get devices status
 @app.route('/status')
 def device_status():
-	try:
-		query =Query(DeviceKey)
-		query.ascending('index')
-		devices =query.find()
-	except:
-		jsonify(status='find error')
-	return  render_template('status.html', devices=devices)
+	username =request.cookies.get('username')
+	islogin = session.get('islogin')
+	print username, ' ',islogin
+	if (not username) or( not islogin ) :
+		username = u'请先登录'
+		islogin = '0'
+	if (islogin =='1'):
+		try:
+			query =Query(DeviceKey)
+			query.ascending('index')
+			devices =query.find()
+		except:
+			jsonify(status='find error')
+		return  render_template('status.html',username =username,islogin=islogin, devices=devices)
+	else:
+		return redirect('/login')
 
+	
 @app.route('/test/<key>')
 def test(key):
 	query = Query(DeviceKey)

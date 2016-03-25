@@ -1,23 +1,20 @@
 <!DOCTYPE HTML>
 <html>
-  <head>
-    <title>device status</title>
-    <link rel="stylesheet" href="/static/style.css" type="text/css">
-  </head>
-  <body>
+{% extends "base.html" %}
+{% block content %}  
     <div id="container">
       <h1>设备状态</h1>
      
       <table>
 	<tr>
-	<td><b>设备号</b> </td><td><b>设备名</b> </td><td><b>最后上传时间</b></td><td><b>实时数据</b></td>
+	<td><b>设备号</b> </td><td><b>设备名</b> </td><td><b>上传时间</b></td><td><b>上次连接时间</b></td><td><b>实时数据</b></td>
 	</tr>
-        <tr><td><hr/></td><td><hr/></td><td><hr/></td><td><hr/></td></tr>
+        <tr><td><hr/></td><td><hr/></td><td><hr/></td><td><hr/></td><td><hr/></td></tr>
 	{% for device in devices %}
-        <tr><td>{{ device.get('index') }}</td><td>{{ device.get('name_cn') }}</td> <td>{{ device.get('uploadtime') }}</td>
+        <tr><td>{{ device.get('index') }}</td><td>{{ device.get('name_cn') }}</td> <td>{{ device.get('uploadtime') }}</td><td>{{ device.get('ping_time') }}</td>
         <td><a href ="https://720testcloud.leanapp.cn/resultindex/{{ device.get('index')}}">数据</a></td></tr>
         {% endfor %}
       </table>
     </div>
-  </body>
+ {% endblock %}
 </html>

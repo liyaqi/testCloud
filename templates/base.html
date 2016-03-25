@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <title>720Health</title>
+  </head>
+  <body>
+  <div class="header">
+        {%if islogin == '1' %}
+        <h2>Welcome ,{{username}}!</h2>
+		<hr/>
+		<p>
+		<a href ="/status">设备状态</a>
+		</p>
+        {%else%}
+        <h2>{{username}}!</h2>
+		<hr/>
+		<p>
+		<a href ="/login">登录</a>
+		</p>
+        {%endif%}
+        </div>
+		{% block content %}{% endblock %}
+  </body>
+</html>
