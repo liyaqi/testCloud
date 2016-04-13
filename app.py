@@ -12,7 +12,7 @@ from flask import request
 from flask import jsonify
 from flask import session,make_response,redirect
 from leancloud import User
-
+import paho.mqtt.publish as publish
 app = Flask(__name__)
 app.secret_key='afjlsjfowflajflkajfkjfkaljf'
 class test_esp(Object):
@@ -25,7 +25,7 @@ class Device:
 	def __init__(self,index,time):
 		self.index =index
 		self.time  =time
-	
+
 # 动态路由
 app.register_blueprint(todos_view, url_prefix='/todos')
 
@@ -79,6 +79,11 @@ def ping(key):
 @app.route('/time')
 def time():
     return jsonify(time = datetime.now())
+@app.route('/testmqtt')
+def testmatt():
+	print 'publish single'
+	publish.single("mqtt", "hello leancloud", hostname="s.vvlogic.com")
+	return 'mqtt ok!'
 @app.route('/tem',methods=['POST'])
 def tem():
 	tem_data = request.json['tem']
