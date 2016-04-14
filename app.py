@@ -82,7 +82,10 @@ def time():
 @app.route('/testmqtt')
 def testmatt():
 	print 'publish single'
-	publish.single("mqtt", "hello leancloud", hostname="s.vvlogic.com")
+	speed =20
+	#publish.single("mqtt", "hello leancloud", hostname="s.vvlogic.com")
+	#publish.single("E-5CCF7F800EB6/fanspeed", speed, hostname="v.vvlogic.com",port=9001,auth = {'username':"vv", 'password':"vv"})
+	control(1,100)
 	return 'mqtt ok!'
 @app.route('/tem',methods=['POST'])
 def tem():
@@ -326,6 +329,7 @@ def add():
 		index = device.get('index')
 		name  = device.get('name')
 		print 'Add Data',index,name
+		control(index,pm_data)
 		test_data = test_esp(ch2o=ch2o_data, t=tem_data, h=hum_data, noise=noi_data, pm=pm_data, key=key_data,name=name,index =index)
 		try:
 			test_data.save()
@@ -342,8 +346,14 @@ def add():
 		return jsonify(status ='succeed')
 	except:
 		return jsonify(error = 'key')
-		
-
+def push_mqtt(speed):
+	print 'send control ',speed
+	publish.single("E-5CCF7F800EB6/fanspeed", speed, hostname="v.vvlogic.com",port=9001,auth = {'username':"vv", 'password':"vv"})
+def control(index,pm):
+	if index ==1:
+		speed=int(pm/10)
+		push_mqtt(speed)
+	
 
 
 	
