@@ -352,6 +352,8 @@ def push_mqtt(speed):
 def control(index,pm):
 	if index ==1:
 		speed=int(pm/10)
+		if speed >30:
+			speed =30
 		push_mqtt(speed)
 	
 
