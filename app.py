@@ -79,14 +79,13 @@ def ping(key):
 @app.route('/time')
 def time():
     return jsonify(time = datetime.now())
-@app.route('/testmqtt')
-def testmatt():
-	print 'publish single'
-	speed =20
+@app.route('/control/<int:speed>')
+def testmatt(speed):
+	#print 'control send',speed
 	#publish.single("mqtt", "hello leancloud", hostname="s.vvlogic.com")
 	#publish.single("E-5CCF7F800EB6/fanspeed", speed, hostname="v.vvlogic.com",port=9001,auth = {'username':"vv", 'password':"vv"})
-	control(1,100)
-	return 'mqtt ok!'
+	control_speed(speed)
+	return 'send contrl ok!'
 @app.route('/tem',methods=['POST'])
 def tem():
 	tem_data = request.json['tem']
@@ -346,6 +345,25 @@ def add():
 		return jsonify(status ='succeed')
 	except:
 		return jsonify(error = 'key')
+@app.route('/upload', methods=['POST'])
+def upload():
+	try:
+		key_data = request.json['key']
+		query = Query(DeviceKey)
+		device=query.get(key_data)
+		index = device.get('index')
+		name  = device.get('name')
+		print 'upload',index,name
+	except:
+		return jsonify(error = 'key')
+	try:
+		datas = request.json['data']
+		for data in datas:
+			print 'tem',data['tem']
+			print 'time',data['time']
+	except:
+	   return jsonify(error = 'json')
+	return jsonify(status ='succeed')
 def push_mqtt(speed):
 	print 'send control ',speed
 	publish.single("E-5CCF7F800EB6/fanspeed", speed, hostname="v.vvlogic.com",port=9001,auth = {'username':"vv", 'password':"vv"})
@@ -355,7 +373,10 @@ def control(index,pm):
 		if speed >30:
 			speed =30
 		push_mqtt(speed)
-	
+def control_speed(speed):
+		if speed >30:
+			speed =30
+		push_mqtt(speed)
 
 
 	
