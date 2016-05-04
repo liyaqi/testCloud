@@ -4,7 +4,7 @@ from datetime import datetime
 from flask import Flask
 from flask import render_template
 from flask import request
-
+import time
 from views.todos import todos_view
 from leancloud import Object
 from leancloud import Query
@@ -13,6 +13,7 @@ from flask import jsonify
 from flask import session,make_response,redirect
 from leancloud import User
 import paho.mqtt.publish as publish
+
 app = Flask(__name__)
 app.secret_key='afjlsjfowflajflkajfkjfkaljf'
 class test_esp(Object):
@@ -77,8 +78,10 @@ def ping(key):
 	print 'device ',index,'ping @',ping_time
 	return jsonify(index=index,time =ping_time)
 @app.route('/time')
-def time():
-    return jsonify(time = datetime.now())
+def time_now():
+	now_time 	=  datetime.now()
+	timestamp    =  time.time()
+	return jsonify(time = now_time,timestamp = timestamp)
 @app.route('/control/<int:speed>')
 def testmatt(speed):
 	#print 'control send',speed
