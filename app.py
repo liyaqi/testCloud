@@ -302,7 +302,7 @@ def json_index(index):
 	try:
 		data=get_latest(key)
 	except:
-		return jsonify(error='invalid key')
+		return jsonify(error='no data',key=key)
 	ch2o = data.get('ch2o')
 	if ch2o ==65535:
 			ch2o=0
