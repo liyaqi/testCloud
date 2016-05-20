@@ -13,6 +13,7 @@ from flask import jsonify
 from flask import session,make_response,redirect
 from leancloud import User
 import paho.mqtt.publish as publish
+import json
 
 app = Flask(__name__)
 app.secret_key='afjlsjfowflajflkajfkjfkaljf'
@@ -369,7 +370,17 @@ def upload():
 	return jsonify(status ='succeed')
 def push_mqtt(speed):
 	print 'send control ',speed
-	publish.single("E-5CCF7F800EB6/fanspeed", speed, hostname="v.vvlogic.com",port=9001,auth = {'username':"vv", 'password':"vv"})
+	#sn= 71c064f1e0828966
+	control_dict ={}
+	control_dict['fanspeed'] =speed
+	control_dict['led'] =0
+	control_dict['autoupdate'] =0
+	control_dict['upurl'] =""
+	control_dict['suburl'] =""
+	control_json = json.JSONEncoder().encode(control_dict)
+	#publish.single("71c064f1e0828966/fanspeed", speed, hostname="v.vvlogic.com",port=9001,auth = {'username':"vv", 'password':"vv"})
+	print control_json
+	publish.single("71c064f1e0828966/rx", control_json, qos=0,retain=False,hostname="v.vvlogic.com",port=9001,auth = {'username':"vv", 'password':"vv"})
 def control(index,pm):
 	if index ==1:
 		speed=int(pm/10)
