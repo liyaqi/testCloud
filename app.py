@@ -199,6 +199,8 @@ def test(key):
 def change_name(index):
 	if request.method == 'POST':
 		name_cn = 	request.form.get('name_cn');
+		if(name_cn==''):
+			name_cn = None
 		query =Query(DeviceKey)
 		query.equal_to('index',index)
 		devicekey=query.first()
