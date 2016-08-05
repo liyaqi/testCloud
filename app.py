@@ -120,7 +120,7 @@ def tem():
 		return jsonify(error='json')
 	try:
 		testPost = testPost(method=method, tem=tem, hum=hum,noise=noise, pm2_5=pm2_5, voc=Voc, pm1=pm1,pm10=pm10,co2 =co2,time =time,sn =sn,fwVer =fwVer,BleVer =BleVer,ConfigVer =ConfigVer)
-	    test_data.save()
+	    testPost.save()
 		print 'post test Add Data: ',SN		
 	except:
 		return jsonify(error='save')	
