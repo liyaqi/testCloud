@@ -19,6 +19,8 @@ app = Flask(__name__)
 app.secret_key='afjlsjfowflajflkajfkjfkaljf'
 class test_esp(Object):
 	pass
+class testPost(Object):
+	pass
 class DeviceKey(Object):
 	pass
 class Device:
@@ -96,6 +98,33 @@ def tem():
 	test_data = test_esp(tem=tem_data)
 	test_data.save()
 	return 'measure,successed!'
+	
+@app.route('/test_post',methods=['POST'])
+def tem():
+	try:
+		method = request.json['method']
+		tem= request.json['tem']
+		hum = request.json['hum']
+		noise = request.json['noise']
+		pm2_5 = request.json['pm2.5']
+		voc = request.json['Voc']
+		pm1  = request.json['pm1']
+		pm10  = request.json['pm10']
+		co2  = request.json['co2']
+		time  = request.json['time']
+		sn  = request.json['SN']
+		fwVer = request.json['fwVer']
+		BleVer = request.json['BleVer']
+		ConfigVer = request.json['ConfigVer']
+	except:
+		return jsonify(error='json')
+	try:
+		testPost = testPost(method=method, tem=tem, hum=hum,noise=noise, pm2_5=pm2_5, voc=Voc, pm1=pm1,pm10=pm10,co2 =co2,time =time,sn =sn,fwVer =fwVer,BleVer =BleVer,ConfigVer =ConfigVer)
+	    test_data.save()
+		print 'post test Add Data: ',SN		
+	except:
+		return jsonify(error='save')	
+	return jsonify(status ='succeed')
 @app.route('/devicekey')
 def deviceKey():
 	device_key 	= DeviceKey()
