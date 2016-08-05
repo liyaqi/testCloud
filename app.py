@@ -100,7 +100,7 @@ def tem():
 	return 'measure,successed!'
 	
 @app.route('/test_post',methods=['POST'])
-def tem():
+def test_post():
 	try:
 		method = request.json['method']
 		tem= request.json['tem']
@@ -121,7 +121,8 @@ def tem():
 	try:
 		test_post = testPost()
 		test_post = test_post(method=method, tem=tem, hum=hum,noise=noise, pm2_5=pm2_5, voc=Voc, pm1=pm1,pm10=pm10,co2 =co2,time =time,sn =sn,fwVer =fwVer,BleVer =BleVer,ConfigVer =ConfigVer)
-		test_post.save()	
+		test_post.save()
+		print 'testPost ADD data',sn
 	except:
 		return jsonify(error='save')	
 	return jsonify(status ='succeed')
