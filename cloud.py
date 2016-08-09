@@ -9,7 +9,7 @@ from leancloud import Query
 import leancloud
 #from leancloud import HttpsRedirectMiddleware
 #app = HttpsRedirectMiddleware(app)
-#engine = Engine(app)
+engine = Engine(app)
 
 
 @engine.define
