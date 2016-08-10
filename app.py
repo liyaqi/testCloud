@@ -125,7 +125,7 @@ def test_post():
 	except:
 		return jsonify(error='save')
 	print time.time()		
-	return jsonify(ConfigVer =1,time= int(time.time()))
+	return jsonify(ConfigVer=1,time=int(time.time()))
 @app.route('/devicekey')
 def deviceKey():
 	device_key 	= DeviceKey()
